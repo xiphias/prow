@@ -1,4 +1,6 @@
+====================
 Prolog Web Framework
+====================
 
 An alpha version of the framework for developing applications in Prolog language.
 The main goal of the framework is to allow every part of the program UI, logic and database access to be written in Prolog (or actually an object-oriented extension of the language).
@@ -15,7 +17,8 @@ I'd like to extend pl2sql to be able to rewrite predicates that depend on each o
 Examples:
 =========
 
-1. Object oriented, hierarchical description of a page:
+Object oriented, hierarchical description of a page:
+----------------------------------------------------
 
 main::
   vbox @ (
@@ -36,8 +39,8 @@ person:me::
  people[session.id]
 
 
-2. An SQL for a counter of seen threads should be generated from this description, and CSS should be applied when it's rendered:
-
+An SQL for a counter of seen threads should be generated from this description, and CSS should be applied when it's rendered:
+--------------------------------------------------------------------------
 
 page.counter.render::
   background_color: 'light-blue'
