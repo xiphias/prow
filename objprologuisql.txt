@@ -1,0 +1,110 @@
+main::
+  vbox @ (
+    header @(background_color:blue),
+	hbox @ (
+	  vbox @ (
+	    me.small,
+		all_pages)),
+      current_page)
+
+		
+widget:person.small::
+  hbox @ (
+    small_photo,
+	name)
+	
+person:me::
+ people[session.id]
+
+ #------
+ dbfield(Table, Field, Clause, Out) :-
+   clause(Table, Args, Clause),
+  call(Table, Args),
+  tablelookup(Table, Field, Args, Out),
+
+  ----
+  me(Out) :-
+    dbfield(person, id, Out, SessionId), 
+    id(session, SessionId),
+    Out is_a person
+  --
+ 
+widget:page.mini_renderer::
+	hbox @ (
+	  icon,
+	  text,
+	  counter)
+	    
+page.counter.render::
+  background_color: 'light-blue'
+  foreground_color: 'dark-blue'
+ 
+pages_page.counter::
+  comment_threads.count(has_new_comment)
+  
+has_new_comment::
+  comments.has(new)
+
+comment.new::
+  not(seen)
+  
+  ----
+  # Single inharitance
+  new(Comment, Out) :- Comment is_a comment, !,
+    not(seen(Comment, Out))
+  ---
+  
+object.seen::
+  me.seen(this)
+  
+  ----
+  seen(Object, Out) :- Object is_a object, !,
+    seen(me, Object, Out)
+	---
+ 
+ text.render::
+   emit
+ 
+  ----
+  :- add_type(render, text).
+  render(Object, Out) :- select_type(render, Object, Type),
+    render(Type, Object, Out).
+  render(text, Object, Out) :-
+    emit(Object, Out).
+	---
+ 
+ widget.render::
+   container.render
+  ----
+  ..
+  render(widget, Widget, Out) :- Text is_a text, !,
+    lookup(Widget, container, Container),
+	render(Container, Out)
+	---
+ 
+ image.tag::
+   html_tag @ (
+     name: img,
+	 src: src)
+	 
+	  ----
+  tag(Image, Out) :- Image is_a image, !,
+    html_tag(H, Out),
+	name(img, Img),
+	lookup(Image, src, Src),
+	attribute(H, src, Src)
+	---
+	 
+ image.render::
+   tag.render
+ 
+ comment.render::
+   assert(seen)
+ 
+ onassert(comment.seen):
+   # Comment was seen by me
+   assert(seen(me))
+   
+ onassert(comment.seen(Person)):
+   execute(seen(Comment, Person))
+	    
