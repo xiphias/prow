@@ -2,7 +2,7 @@
 Prolog Web Framework
 ====================
 
-An alpha version of the framework for developing applications in Prolog language.
+An early developer version of the framework for developing applications in Prolog language.
 The main goal of the framework is to allow every part of the program UI, logic and database access to be written in Prolog (or actually an object-oriented extension of the language).
 The framework generates CSS, HTML and SQL from the declarative description of the application.
 
