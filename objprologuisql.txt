@@ -108,3 +108,32 @@ object.seen::
  onassert(comment.seen(Person)):
    execute(seen(Comment, Person))
 	    
+%%%% Demo for database access
+%%%% Needs database with user: id, name; address: id, user_id, address
+
+execute('select user.name as name, address.address as address from user, address where user.id = address.user_id',
+        Result) :- Result = ['John', 'Budapest']; Result = ['Jane', 'New York'].
+
+database(user, [id, name]).
+database(address, [id, user_id, address]).
+user_address(Name, Address) :- user(ID, Name), address(_, ID, Address).
+
+:- user_address_ui::
+  hbox @ [
+    text('Name: '),
+    text(Name),
+    text(', address: '),
+    text(Address)	]
+  :: user_address(Name, Address).
+ 
+
+:- demo::
+  vbox @ [
+    user_address_ui ].
+ 
+ check(demo(D), render(D, 'Name: John, address: Budapest<br>Name: Jane, address: New York<br>')).
+ % Alternative query
+ user_address(Z, Address) :- user(User), Z is User.name, Address is User.address.address.
+ 
+ %%% Demo for inserting either new address or new address with new user (sounds fun :-) ).
+ 
